@@ -1,4 +1,4 @@
-//stylus -w C:\Users\eugka\Desktop\_react-sandox\binary-calc\src\styles\App.styl -o C:\Users\eugka\Desktop\_react-sandox\binary-calc\src\App.css
+//stylus -w C:\Users\eugka\Desktop\binary-calc\src\styles\App.styl -o C:\Users\eugka\Desktop\binary-calc\src\App.css
 
 //ColorSheme
 $bgColor = #F5F5F6
@@ -10,7 +10,7 @@ $fontDarkColor = #E1E2E1
 
 //Sizes
 $dWidth = 40em
-$dHeight = 20em
+$dHeight = 25em
 
 #root 
     background-color: $bgColor;
@@ -38,3 +38,34 @@ $dHeight = 20em
 
 .display .currentValue
     font-size: 4rem;
+
+
+.panelWrapper
+    display flex
+    flex-wrap: wrap
+    padding 20px 10px
+
+.btn
+    background-color $pLightColor
+    margin: 7px 10px
+    padding 10px 0
+    box-shadow: 1px 1px 0.5px black
+    transition: background-color 0.5s
+    text-align center
+    font-weight bold
+    font-size: 2em
+    user-select none
+
+.btn:hover
+    cursor pointer
+    background-color: lightness($pLightColor, 70%)
+
+.btn:active
+    background-color: lightness($pLightColor, 85%)
+    box-shadow: none
+
+.btn-sm
+    width 75px
+
+.btn-lg
+    width 170px
