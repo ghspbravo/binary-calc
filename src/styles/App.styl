@@ -1,0 +1,40 @@
+//stylus -w C:\Users\eugka\Desktop\_react-sandox\binary-calc\src\styles\App.styl -o C:\Users\eugka\Desktop\_react-sandox\binary-calc\src\App.css
+
+//ColorSheme
+$bgColor = #F5F5F6
+$pColor = #5d34af
+$pLightColor = #9061e2
+$pDarkColor = #27057f
+$fontColor = #fff
+$fontDarkColor = #E1E2E1
+
+//Sizes
+$dWidth = 40em
+$dHeight = 20em
+
+#root 
+    background-color: $bgColor;
+    color: $fontColor;
+
+.App {
+  margin: auto;
+  width: $dWidth;
+  height: $dHeight;
+  background-color: $pColor;
+}
+
+
+.display
+    text-align: right;
+    padding: 10px 20px;
+    background-color: $pDarkColor
+
+.display:hover
+    cursor: default;
+
+.display .expression
+    font-size 2rem;
+    color: $fontDarkColor;
+
+.display .currentValue
+    font-size: 4rem;
