@@ -4,8 +4,8 @@
 }
 .App {
   margin: auto;
-  width: 40em;
-  height: 25em;
+  max-width: 40em;
+  overflow: hidden;
   background-color: #5d34af;
 }
 .display {
@@ -19,9 +19,16 @@
 .display .expression {
   font-size: 2rem;
   color: #e1e2e1;
+  height: 60px;
 }
 .display .currentValue {
   font-size: 4rem;
+  height: 95px;
+}
+.display .currentValue,
+.display .expression {
+  white-space: nowrap;
+  overflow: auto;
 }
 .panelWrapper {
   display: flex;
@@ -43,13 +50,14 @@
   cursor: pointer;
   background-color: #a47ee7;
 }
-.btn:active {
+.btn:active,
+.btn-pressed {
   background-color: #d2bef3;
   box-shadow: none;
 }
 .btn-sm {
-  width: 75px;
+  width: 65px;
 }
 .btn-lg {
-  width: 170px;
+  width: 150px;
 }

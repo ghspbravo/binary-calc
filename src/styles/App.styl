@@ -9,8 +9,9 @@ $fontColor = #fff
 $fontDarkColor = #E1E2E1
 
 //Sizes
-$dWidth = 40em
-$dHeight = 25em
+$appWidth = 40em
+$bLgWidth = 150px
+$bSmWidth = 65px
 
 #root 
     background-color: $bgColor;
@@ -18,8 +19,8 @@ $dHeight = 25em
 
 .App {
   margin: auto;
-  width: $dWidth;
-  height: $dHeight;
+  max-width: $appWidth;
+  overflow hidden
   background-color: $pColor;
 }
 
@@ -35,9 +36,15 @@ $dHeight = 25em
 .display .expression
     font-size 2rem;
     color: $fontDarkColor;
+    height 60px
 
 .display .currentValue
     font-size: 4rem;
+    height 95px
+
+.display .currentValue, .display .expression
+    white-space nowrap
+    overflow auto
 
 
 .panelWrapper
@@ -60,12 +67,12 @@ $dHeight = 25em
     cursor pointer
     background-color: lightness($pLightColor, 70%)
 
-.btn:active
+.btn:active, .btn-pressed
     background-color: lightness($pLightColor, 85%)
     box-shadow: none
 
 .btn-sm
-    width 75px
+    width $bSmWidth
 
 .btn-lg
-    width 170px
+    width $bLgWidth

@@ -4,7 +4,7 @@ export default (value, expression) => {
     return (
         <div className="display">
             <div className="expression">{expression}</div>
-            <div className="currentValue">{value}</div>
+            <div dir="rtl" className="currentValue">{value}</div>
         </div>
     )
 };

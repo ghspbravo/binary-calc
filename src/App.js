@@ -24,6 +24,12 @@ class App extends Component {
         window.onkeydown = (e) => {
             this.handleKeyDown(e.keyCode);
         }
+        document.getElementsByClassName('panelWrapper')[0].childNodes
+            .forEach((div) => div.addEventListener('onPress',
+                () => {
+                    div.classList.toggle("btn-pressed")
+                    setTimeout(() => div.classList.toggle("btn-pressed"), 100)
+                }, false))
     }
 
     render() {
@@ -39,24 +45,31 @@ class App extends Component {
         switch (keyCode) {
             case 49://1
                 this.handleNumeric('1')
+                this.dispatchPressById('1')
                 break;
             case 48://0
                 this.handleNumeric('0')
+                this.dispatchPressById('0')
                 break;
             case 43://+
                 this.handleOperation('+')
+                this.dispatchPressById('+')
                 break;
             case 45://-
                 this.handleOperation('-')
+                this.dispatchPressById('-')
                 break;
             case 42://*
                 this.handleOperation('*')
+                this.dispatchPressById('*')
                 break;
             case 47:// /
                 this.handleOperation('/')
+                this.dispatchPressById('/')
                 break;
             case 13://enter
                 this.handleControl('eval')
+                this.dispatchPressById('eval')
                 break;
 
             default:
@@ -68,12 +81,15 @@ class App extends Component {
         switch (keyCode) {
             case 8://backspace
                 this.handleControl('delete')
+                this.dispatchPressById('delete')
                 break;
             case 46://delete
                 this.handleControl('clear')
+                this.dispatchPressById('clear')
                 break;
             case 27://escape
                 this.handleControl('clearAll')
+                this.dispatchPressById('clearAll')
                 break;
 
             default:
@@ -100,6 +116,7 @@ class App extends Component {
             result: true,
             expression: this.state.expression + this.state.currentValue + ` ${type} `
         })
+        document.getElementsByClassName('expression')[0].scrollBy(document.getElementsByClassName('expression')[0].scrollWidth, 0)
     }
 
     handleNumeric = (num) => {
@@ -165,6 +182,10 @@ class App extends Component {
         }
     }
 
+    dispatchPressById = (id) => {
+        let pressed = new Event('onPress')
+        document.getElementById(id).dispatchEvent(pressed)
+    }
     binToInt = (bin) => { return parseInt(bin, 2) }
     intToBin = (int) => { return int.toString(2) }
 }
