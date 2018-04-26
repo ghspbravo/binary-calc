@@ -12,9 +12,13 @@ class App extends Component {
             expression: '',
             result: true,
         };
+        this.handleNumeric = this.handleNumeric.bind(this);
+        this.handleOperation = this.handleOperation.bind(this);
+        this.handleControl = this.handleControl.bind(this);
     };
 
     VALUE = 0;
+    CURRENT_VALUE = 0;
     CURRENT_OPERATION = "";
 
     componentDidMount() {
@@ -30,6 +34,14 @@ class App extends Component {
                     div.classList.toggle("btn-pressed")
                     setTimeout(() => div.classList.toggle("btn-pressed"), 100)
                 }, false))
+        document.getElementsByClassName('currentValue')[0].addEventListener('click', () => {
+            if (isNaN(this.state.currentValue)) return;
+            this.setState({
+                currentValue: this.intToBin(this.CURRENT_VALUE) === this.state.currentValue
+                    ? this.CURRENT_VALUE.toString()
+                    : this.intToBin(this.CURRENT_VALUE),
+            })
+        })
     }
 
     render() {
@@ -97,37 +109,40 @@ class App extends Component {
         }
     }
 
-    handleOperation = (type) => {
+    handleOperation(type) {
+        if (isNaN(this.CURRENT_VALUE)) this.CURRENT_VALUE = 0;
         if (this.state.result) {
+            this.CURRENT_OPERATION = type;
+            this.VALUE = this.state.expression ? this.VALUE : this.CURRENT_VALUE;
             this.setState({
                 expression: this.state.expression
-                    ? this.state.expression.slice(0, -3) + ` ${type} `
-                    : this.state.currentValue + ` ${type} `
+                    ? this.state.expression.slice(0, -3) + ` ${this.CURRENT_OPERATION} `
+                    : this.intToBin(this.CURRENT_VALUE) + ` ${this.CURRENT_OPERATION} `
             })
-            this.CURRENT_OPERATION = type;
             return;
         }
-        this.VALUE = this.CURRENT_OPERATION === ''
-            ? this.binToInt(this.state.currentValue)
-            : this.doMath(this.VALUE, this.binToInt(this.state.currentValue), this.CURRENT_OPERATION)
+        this.VALUE = !this.CURRENT_OPERATION
+            ? this.CURRENT_VALUE
+            : this.doMath(this.VALUE, this.CURRENT_VALUE, this.CURRENT_OPERATION)
         this.CURRENT_OPERATION = type;
         this.setState({
             currentValue: this.intToBin(this.VALUE),
             result: true,
-            expression: this.state.expression + this.state.currentValue + ` ${type} `
+            expression: this.state.expression + this.intToBin(this.CURRENT_VALUE) + ` ${type} `
         })
         document.getElementsByClassName('expression')[0].scrollBy(document.getElementsByClassName('expression')[0].scrollWidth, 0)
     }
 
-    handleNumeric = (num) => {
+    handleNumeric(num) {
         if (num === '0' && this.state.currentValue === '0') return;
         if (!this.state.result && this.state.currentValue === '0') this.setState({ result: true })
         this.setState({
             currentValue: this.state.result
                 ? `${num}`
-                : this.state.currentValue + `${num}`,
+                : this.intToBin(this.CURRENT_VALUE) + `${num}`,
             result: false
         })
+        this.CURRENT_VALUE = this.binToInt(this.state.currentValue)
     }
 
     doMath = (left, right, type) => {// radix = 10 for all
@@ -150,31 +165,34 @@ class App extends Component {
                 return left;
         }
         this.CURRENT_OPERATION = '';
-        return result;
+        return result >= 0 ? result : 0;
     }
 
-    handleControl = (controlCode) => {
+    handleControl(controlCode) {
         switch (controlCode) {
             case 'delete':
+                let value = this.intToBin(this.CURRENT_VALUE);
                 this.setState({
-                    currentValue: this.state.result || this.state.currentValue.length === 1
+                    currentValue: this.state.result || value.length === 1
                         ? '0'
-                        : this.state.currentValue.slice(0, -1)
+                        : value.slice(0, -1)
                 })
-                if (this.state.currentValue === '0') this.setState({ result: true })
+                this.CURRENT_VALUE = this.binToInt(this.state.currentValue)
+                // if (this.state.currentValue === '0') this.setState({ result: true })
                 break;
             case 'clear':
                 this.setState({ currentValue: '0', result: true });
+                this.CURRENT_VALUE = this.binToInt(this.state.currentValue)
                 break;
             case 'clearAll':
-                this.VALUE = 0; this.CURRENT_OPERATION = '';
+                this.VALUE = 0; this.CURRENT_OPERATION = ''; this.CURRENT_VALUE = 0;
                 this.setState({ expression: '', currentValue: '0', result: true });
                 break;
             case 'eval':
                 if (this.CURRENT_OPERATION === '') return;
-                this.VALUE = this.doMath(this.VALUE, this.binToInt(this.state.currentValue), this.CURRENT_OPERATION);
-                this.CURRENT_OPERATION = '';
-                this.setState({ result: true, expression: '', currentValue: this.intToBin(this.VALUE) });
+                this.CURRENT_VALUE = this.doMath(this.VALUE, this.CURRENT_VALUE, this.CURRENT_OPERATION);
+                this.CURRENT_OPERATION = ''; this.VALUE = 0;
+                this.setState({ result: true, expression: '', currentValue: this.intToBin(this.CURRENT_VALUE) });
                 break;
 
             default:
